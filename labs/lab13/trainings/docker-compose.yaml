@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:17'
+    environment:
+      - 'POSTGRES_DB=trainings'
+      - 'POSTGRES_PASSWORD=Sup3rS3cr3t'
+      - 'POSTGRES_USER=admin'
+    ports:
+      - '127.0.0.1:5432:5432'

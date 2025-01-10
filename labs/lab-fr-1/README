@@ -1,0 +1,1 @@
+java -XX:StartFlightRecording=filename=main.jfr Main.java

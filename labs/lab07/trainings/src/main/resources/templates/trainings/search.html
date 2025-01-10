@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: head}">
+   <title>Alle Trainings</title>
+</head>
+<body>
+
+<span th:replace="~{fragments/header :: body/content()}"></span>
+
+<main role="main" class="container">
+
+   <div class="starter-template">
+      <h1 th:text="${heading}">Platzhalter</h1>
+
+      <form th:action="@{/trainings/search}" method="get" class="mb-4">
+         <div class="input-group">
+            <label>
+               <input
+                       type="text"
+                       name="name"
+                       class="form-control"
+                       placeholder="Enter training name"
+                       required
+               >
+            </label>
+            <button type="submit" class="btn btn-primary">
+               Search
+            </button>
+         </div>
+      </form>
+
+      <table class="table">
+         <thead>
+         <tr>
+            <th>Datum</th>
+            <th>Thema</th>
+            <th>Ort</th>
+            <th>Trainer</th>
+            <th>Plätze</th>
+         </tr>
+         </thead>
+         <tbody>
+         <tr th:each="searchResult: ${searchResults}"
+             th:classappend="${searchResult.matchType.name() == 'EXACT'} ? 'table-success' : 'table-warning'">
+            <td th:text="${#temporals.format(searchResult.training().startTime.atZoneSameInstant('Europe/Berlin'), 'dd.MM.yyyy HH:mm')}"></td>
+            <td>
+               <a th:href="@{/trainings/__${searchResult.training().id}__}">
+                  <span th:text="${searchResult.training().topic}"></span>
+                  <span th:if="${searchResult.matchType.name() == 'EXACT'}"
+                        class="badge bg-success ms-2">Exact Match</span>
+                  <span th:if="${searchResult.matchType.name() == 'FUZZY'}"
+                        class="badge bg-warning ms-2">Fuzzy Match</span>
+               </a>
+            </td>
+            <td th:text="${searchResult.training().location}"></td>
+            <td th:text="${searchResult.training().instructor}"></td>
+            <td>
+            <span th:text="${searchResult.training().availableSeats}"
+                  th:classappend="${searchResult.training().availableSeats le 3} ? 'badge-danger' : 'badge-success'"
+                  class="badge badge-secondary">
+               12
+            </span>
+            </td>
+         </tr>
+         </tbody>
+      </table>
+
+   </div>
+
+</main><!-- /.container -->
+
+<span th:replace="~{fragments/footer :: body/content()}"></span>
+</body>
+</html>

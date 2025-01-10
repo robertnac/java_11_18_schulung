@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: 'Training App'
+  flyway:
+    locations:
+      - classpath:db/migration
+      - classpath:db/dev-migration
+    clean-disabled: false
+  docker:
+    compose:
+      lifecycle-management: start_only
+      skip:
+        in-tests: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    env:
+      show-values: always
+    health:
+      show-details: always
+
+
+trion:
+  training:
+    start-page-heading: "Alle Trainings"

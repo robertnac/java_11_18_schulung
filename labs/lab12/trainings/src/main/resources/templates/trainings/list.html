@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: head}">
+    <title>Alle Trainings</title>
+</head>
+<body>
+
+<span th:replace="~{fragments/header :: body/content()}"></span>
+
+<main role="main" class="container">
+
+    <div class="starter-template">
+        <h1 th:text="${heading}">Platzhalter</h1>
+
+        <!-- Filter Buttons -->
+        <div class="btn-group mb-3" role="group" aria-label="Filter Buttons">
+            <a th:href="@{/trainings(filter='all')}"
+               th:classappend="${#strings.equals(param.filter, 'all') or param.filter == null} ? 'btn-primary' : 'btn-secondary'"
+               class="btn">
+                All
+            </a>
+            <a th:href="@{/trainings(filter='today')}"
+               th:classappend="${#strings.equals(param.filter, 'today')} ? 'btn-primary' : 'btn-secondary'"
+               class="btn">
+                Today
+            </a>
+            <a th:href="@{/trainings(filter='freeSeats')}"
+               th:classappend="${#strings.equals(param.filter, 'freeSeats')} ? 'btn-primary' : 'btn-secondary'"
+               class="btn">
+                Free Seats
+            </a>
+
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Datum</th>
+                <th>Thema</th>
+                <th>Ort</th>
+                <th>Trainer</th>
+                <th>Plätze</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="training: ${trainings}">
+                <td th:text="${#temporals.format(training.startTime.atZoneSameInstant('Europe/Berlin'), 'dd.MM.yyyy HH:mm')}"></td>
+                <td><a th:href="@{/trainings/__${training.id}__}">
+                    <span th:text="${training.topic}"></span>
+                </a></td>
+                <td th:text="${training.location}"></td>
+                <td th:text="${training.instructor}"></td>
+                <td><span th:text="${training.availableSeats}"
+                          th:classappend="${training.availableSeats le 3} ? 'badge-danger' : 'badge-success'"
+                          class="badge badge-secondary">12</span></td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</main><!-- /.container -->
+
+<span th:replace="~{fragments/footer :: body/content()}"></span>
+
+</body>
+</html>
